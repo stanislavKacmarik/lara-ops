@@ -45,7 +45,7 @@ jobs:
     - name: Execute commands on server
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: cd /var/www/html/laraops && php artisan down && php artisan migrate --quiet && php artisan up
+        command: cd /var/www/html/laraops && php artisan down && php artisan migrate --force && php artisan up
         host: 161.35.202.88
         username: root
         privateKey: ${{ secrets.DEPLOY_KEY }}
