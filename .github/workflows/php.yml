@@ -36,7 +36,7 @@ jobs:
     - name: rsync prod
       uses: burnett01/rsync-deployments@4.1
       with:
-        switches: -avzr --delete --exclude=".env" --exclude="node_modules" --exclude="vendor" --exclude="storage" --include="" --filter=""
+        switches: -avzr --delete --exclude=".env" --exclude="node_modules" --exclude="storage" --include="" --filter=""
         path: ./
         remote_path: /var/www/html/laraops/
         remote_host: 161.35.202.88
