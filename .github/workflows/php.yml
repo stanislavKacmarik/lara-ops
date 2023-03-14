@@ -24,6 +24,8 @@ jobs:
       id: composer-cache
       uses: actions/cache@v3
       with:
+        dev: no
+        args: --ignore-platform-reqs
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
