@@ -34,14 +34,14 @@ jobs:
       with:
         switches: -avzr --delete --exclude=".env" --exclude="node_modules" --exclude="storage" --include="" --filter="" --chown=www-data:www-data
         path: ./
-        remote_path: /var/www/html/laraops/
+        remote_path: /var/www/laraops/
         remote_host: 161.35.202.88
         remote_user: root
         remote_key: ${{ secrets.DEPLOY_KEY }}
     - name: Execute commands on server
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: cd /var/www/html/laraops && php artisan down && php artisan migrate --force && php artisan up
+        command: cd /var/www/laraops && php artisan down && php artisan migrate --force && php artisan up
         host: 161.35.202.88
         username: root
         privateKey: ${{ secrets.DEPLOY_KEY }}
