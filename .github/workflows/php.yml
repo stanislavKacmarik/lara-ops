@@ -24,8 +24,6 @@ jobs:
       id: composer-cache
       uses: actions/cache@v3
       with:
-        dev: no
-        args: --ignore-platform-reqs
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
@@ -35,10 +33,10 @@ jobs:
       run: composer install --prefer-dist --no-progress
     - name: Archive build
       run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
-    - name: rsync prod
-      uses: burnett01/rsync-deployments@4.1
+    - name: Copy files to server
+      uses: burnett01/rsync-deployments@5.2.1
       with:
-        switches: -avzr --delete --exclude=".env" --exclude="node_modules" --exclude="storage" --include="" --filter=""
+        switches: -avzr --delete --exclude=".env" --exclude="node_modules" --exclude="storage" --include="" --filter="" --chown=www-data:www-data
         path: ./
         remote_path: /var/www/html/laraops/
         remote_host: 161.35.202.88
