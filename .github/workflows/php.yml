@@ -43,11 +43,13 @@ jobs:
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
     - name: Install dependencies
+      working-directory: resources/laraops
       run: npm ci
       #    - name: Modify environment.prod.ts
       #      run: sed -i 's+__ANGULAR_ENV_API_URL__+${{ secrets.ANGULAR_ENV_API_URL_STAGING_DO }}+g' projects/dashboard/src/environments/environment.prod.ts
     - name: Build project
-      run: npm run build
+      working-directory: resources/laraops
+      run:  npm run build
     - name: Copy files to server
       uses: burnett01/rsync-deployments@5.2.1
       with:
