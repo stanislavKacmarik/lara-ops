@@ -50,12 +50,21 @@ jobs:
     - name: Build project
       working-directory: resources/laraops
       run:  npm run build
-    - name: Copy files to server
+    - name: Copy BE files to server
       uses: burnett01/rsync-deployments@5.2.1
       with:
-        switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --chown=www-data:www-data
+        switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --exclude="resources/laraops" --chown=www-data:www-data
         path: ./
-        remote_path: /var/www/laraops/
+        remote_path: /var/www/laraops-be/
+        remote_host: 161.35.202.88
+        remote_user: root
+        remote_key: ${{ secrets.DEPLOY_KEY }}
+    - name: Copy FE files to server
+      uses: burnett01/rsync-deployments@5.2.1
+      with:
+        switches: -avzr --delete
+        path: ./var/www/laraops/resources/laraops/dist/laraops/
+        remote_path: /var/www/laraops-fe/
         remote_host: 161.35.202.88
         remote_user: root
         remote_key: ${{ secrets.DEPLOY_KEY }}
