@@ -29,6 +29,25 @@ jobs:
       run: composer install --prefer-dist --no-progress
     - name: Archive build
       run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
+    - name: Install FE
+      uses: actions/setup-node@v1
+      with:
+        node-version: '18.x'
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+          ${{ runner.OS }}-
+    - name: Install dependencies
+      run: npm ci
+      #    - name: Modify environment.prod.ts
+      #      run: sed -i 's+__ANGULAR_ENV_API_URL__+${{ secrets.ANGULAR_ENV_API_URL_STAGING_DO }}+g' projects/dashboard/src/environments/environment.prod.ts
+    - name: Build project
+      run: npm run build
     - name: Copy files to server
       uses: burnett01/rsync-deployments@5.2.1
       with:
@@ -45,3 +64,4 @@ jobs:
         host: 161.35.202.88
         username: root
         privateKey: ${{ secrets.DEPLOY_KEY }}
+

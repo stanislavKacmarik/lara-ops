@@ -20,3 +20,6 @@ Setup
    ```
 4. `./vendor/bin/sail up`
 5. `./vendor/bin/sail php artisan key:generate`
+
+run BE: `./vendor/bin/sail up`
+run FE: `./vendor/bin/sail npm run dev`
