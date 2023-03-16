@@ -62,7 +62,7 @@ jobs:
     - name: Copy FE files to server
       uses: burnett01/rsync-deployments@5.2.1
       with:
-        switches: -avzr --delete
+        switches: -avzr --delete --chown=www-data:www-data
         path: ./resources/laraops/dist/laraops/
         remote_path: /var/www/laraops-fe/
         remote_host: 161.35.202.88
