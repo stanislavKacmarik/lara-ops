@@ -51,7 +51,7 @@ jobs:
     - name: Copy files to server
       uses: burnett01/rsync-deployments@5.2.1
       with:
-        switches: -avzr --delete --exclude="{.env,.editorconfig,.git,.gitattributes,.github.gitignore,docker-compose.yml,node_modules,storage}" --chown=www-data:www-data
+        switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --chown=www-data:www-data
         path: ./
         remote_path: /var/www/laraops/
         remote_host: 161.35.202.88
