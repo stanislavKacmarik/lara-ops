@@ -3,10 +3,10 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
-                WWWGROUP: '${WWWGROUP}'
+                WWWGROUP: '${WWWGROUP:-dell}'
         image: sail-8.2/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
@@ -15,10 +15,11 @@ services:
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
             - '${ANGULAR_PORT:-4200}:${VITE_PORT:-4200}'
         environment:
-            WWWUSER: '${WWWUSER}'
+            WWWUSER: '${WWWUSER:-dell}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            PHP_IDE_CONFIG: "serverName=0.0.0.0"
         volumes:
             - '.:/var/www/html'
         networks:

@@ -22,4 +22,5 @@ Setup
 5. `./vendor/bin/sail php artisan key:generate`
 
 run BE: `./vendor/bin/sail up`
-run FE: `./vendor/bin/sail npm run dev`
+
+run FE: `./vendor/bin/sail npm run  --prefix /var/www/html/resources/laraops start  -- --host=0.0.0.0`
