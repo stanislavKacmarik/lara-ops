@@ -55,7 +55,7 @@ jobs:
       with:
         switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --exclude="resources/laraops" --chown=www-data:www-data
         path: ./
-        remote_path: /var/www/laraops-be/
+        remote_path: /var/www/laraops-api/
         remote_host: 161.35.202.88
         remote_user: root
         remote_key: ${{ secrets.DEPLOY_KEY }}
