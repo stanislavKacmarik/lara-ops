@@ -45,8 +45,8 @@ jobs:
     - name: Install dependencies
       working-directory: resources/laraops
       run: npm ci
-      #    - name: Modify environment.prod.ts
-      #      run: sed -i 's+__ANGULAR_ENV_API_URL__+${{ secrets.ANGULAR_ENV_API_URL_STAGING_DO }}+g' projects/dashboard/src/environments/environment.prod.ts
+    - name: Modify environment.prod.ts
+      run: sed -i 's+${API_URL}+${{ API_URL_PROD }}+g' resources/laraops/src/environments/environment.ts
     - name: Build project
       working-directory: resources/laraops
       run:  npm run build
