@@ -13,66 +13,66 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - uses: actions/checkout@v3
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-    - name: Archive build
-      run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
-    - name: Install FE
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
-    - name: Cache Node.js modules
-      uses: actions/cache@v3
-      with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
-        path: ~/.npm
-        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
-    - name: Install dependencies
-      working-directory: resources/laraops
-      run: npm ci
-    - name: Modify environment.prod.ts
-      run: sed -i 's+${API_URL}+${{ secrets.API_URL_PROD }}+g' resources/laraops/src/environments/environment.ts
-    - name: Build project
-      working-directory: resources/laraops
-      run:  npm run build
-    - name: Copy BE files to server
-      uses: burnett01/rsync-deployments@5.2.1
-      with:
-        switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore"  --exclude="docker" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --exclude="resources/laraops" --chown=www-data:www-data
-        path: ./
-        remote_path: /var/www/laraops-api/
-        remote_host: 161.35.202.88
-        remote_user: root
-        remote_key: ${{ secrets.DEPLOY_KEY }}
-    - name: Copy FE files to server
-      uses: burnett01/rsync-deployments@5.2.1
-      with:
-        switches: -avzr --delete --chown=www-data:www-data
-        path: ./resources/laraops/dist/laraops/
-        remote_path: /var/www/laraops-fe/
-        remote_host: 161.35.202.88
-        remote_user: root
-        remote_key: ${{ secrets.DEPLOY_KEY }}
-    - name: Execute commands on server
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-        command: cd /var/www/laraops && php artisan down && php artisan migrate --force && php artisan up
-        host: 161.35.202.88
-        username: root
-        privateKey: ${{ secrets.DEPLOY_KEY }}
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Archive build
+        run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
+      - name: Install FE
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        working-directory: resources/laraops
+        run: npm ci
+      - name: Modify environment.prod.ts
+        run: sed -i 's+${API_URL}+${{ secrets.API_URL_PROD }}+g' resources/laraops/src/environments/environment.ts
+      - name: Build project
+        working-directory: resources/laraops
+        run:  npm run build
+      - name: Copy BE files to server
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete --exclude=".env" --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude=".gitignore"  --exclude="docker" --exclude="docker-compose.yml" --exclude="node_modules" --exclude="storage" --exclude="resources/laraops" --chown=www-data:www-data
+          path: ./
+          remote_path: /var/www/laraops-api/
+          remote_host: 161.35.202.88
+          remote_user: root
+          remote_key: ${{ secrets.DEPLOY_KEY }}
+      - name: Copy FE files to server
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete --chown=www-data:www-data
+          path: ./resources/laraops/dist/laraops/
+          remote_path: /var/www/laraops-fe/
+          remote_host: 161.35.202.88
+          remote_user: root
+          remote_key: ${{ secrets.DEPLOY_KEY }}
+      - name: Execute commands on server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd /var/www/laraops && php artisan down && php artisan migrate --force && php artisan up
+          host: 161.35.202.88
+          username: root
+          privateKey: ${{ secrets.DEPLOY_KEY }}
 
